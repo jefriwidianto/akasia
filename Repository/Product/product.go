@@ -17,9 +17,15 @@ func (p *product) CreateProduct(ctx context.Context, param Request.CreateProduct
 	return
 }
 
-func (p *product) CheckExistsProduct(ctx context.Context, title string) (exists bool, err error) {
+func (p *product) CheckExistsProductTitle(ctx context.Context, title string) (exists bool, err error) {
 	query := `SELECT EXISTS (SELECT 1 FROM t_product WHERE LOWER(title) = LOWER(?))`
 	err = Config.DATABASE_MAIN.Get().QueryRowContext(ctx, query, title).Scan(&exists)
+	return
+}
+
+func (p *product) CheckExistsProductId(ctx context.Context, id string) (exists bool, err error) {
+	query := `SELECT EXISTS (SELECT 1 FROM t_product WHERE id = ?)`
+	err = Config.DATABASE_MAIN.Get().QueryRowContext(ctx, query, id).Scan(&exists)
 	return
 }
 

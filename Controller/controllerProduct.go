@@ -35,7 +35,7 @@ func (c *Controller) CreateProduct(ctx echo.Context) (err error) {
 		})
 	}
 
-	exists, err := Repository.ApplicationRepository.Product.CheckExistsProduct(ctx.Request().Context(), req.Title)
+	exists, err := Repository.ApplicationRepository.Product.CheckExistsProductTitle(ctx.Request().Context(), req.Title)
 	if err != nil {
 		return ctx.JSON(http.StatusInternalServerError, &Response.Responses{
 			Data:    nil,
@@ -80,7 +80,22 @@ func (c *Controller) UpdateProduct(ctx echo.Context) (err error) {
 		})
 	}
 
-	exists, err := Repository.ApplicationRepository.Product.CheckExistsProduct(ctx.Request().Context(), req.Title)
+	existsProductId, err := Repository.ApplicationRepository.Product.CheckExistsProductId(ctx.Request().Context(), req.Id)
+	if err != nil {
+		return ctx.JSON(http.StatusInternalServerError, &Response.Responses{
+			Data:    nil,
+			Message: err.Error(),
+		})
+	}
+
+	if !existsProductId {
+		return ctx.JSON(http.StatusInternalServerError, &Response.Responses{
+			Data:    nil,
+			Message: errors.New("Product Id Not Found").Error(),
+		})
+	}
+
+	exists, err := Repository.ApplicationRepository.Product.CheckExistsProductTitle(ctx.Request().Context(), req.Title)
 	if err != nil {
 		return ctx.JSON(http.StatusInternalServerError, &Response.Responses{
 			Data:    nil,
@@ -111,6 +126,21 @@ func (c *Controller) UpdateProduct(ctx echo.Context) (err error) {
 
 func (c *Controller) DeleteProduct(ctx echo.Context) (err error) {
 	productId := ctx.Param("id")
+	existsProductId, err := Repository.ApplicationRepository.Product.CheckExistsProductId(ctx.Request().Context(), productId)
+	if err != nil {
+		return ctx.JSON(http.StatusInternalServerError, &Response.Responses{
+			Data:    nil,
+			Message: err.Error(),
+		})
+	}
+
+	if !existsProductId {
+		return ctx.JSON(http.StatusInternalServerError, &Response.Responses{
+			Data:    nil,
+			Message: errors.New("Product Id Not Found").Error(),
+		})
+	}
+
 	if err = Repository.ApplicationRepository.Product.DeleteProduct(ctx.Request().Context(), productId); err != nil {
 		return ctx.JSON(http.StatusInternalServerError, &Response.Responses{
 			Data:    nil,
