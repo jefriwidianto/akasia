@@ -5,6 +5,10 @@ import (
 	"database/sql"
 	_ "github.com/go-sql-driver/mysql"
 	"log"
+	"os"
+	"path"
+	"runtime"
+	"strings"
 )
 
 func (c ConfigSettingSql) InitDB() {
@@ -36,32 +40,32 @@ func (c ConfigSettingSql) InitDB() {
 	SqlConnection = Connection
 
 	//run migration Table
-	//err = migrate(SqlConnection)
-	//if err != nil {
-	//	panic(err.Error())
-	//	return
-	//}
+	err = migrate(SqlConnection)
+	if err != nil {
+		panic(err.Error())
+		return
+	}
 }
 
-//func migrate(db *sql.DB) (err error) {
-//	tx, err := db.Begin()
-//	var queryAll []string
-//	query, _ := os.ReadFile(dirPathMigration())
-//	sqlQuery := string(query)
-//	queryAll = strings.Split(sqlQuery, ";")
-//	for _, v := range queryAll {
-//		_, err = tx.Exec(v)
-//		if err != nil {
-//			tx.Rollback()
-//			return err
-//		}
-//	}
-//
-//	tx.Commit()
-//	return
-//}
-//
-//func dirPathMigration() string {
-//	_, filename, _, _ := runtime.Caller(1)
-//	return path.Join(path.Dir(filename), PathMigration+"2023-09-27_create_table.sql")
-//}
+func migrate(db *sql.DB) (err error) {
+	tx, err := db.Begin()
+	var queryAll []string
+	query, _ := os.ReadFile(dirPathMigration())
+	sqlQuery := string(query)
+	queryAll = strings.Split(sqlQuery, ";")
+	for _, v := range queryAll {
+		_, err = tx.Exec(v)
+		if err != nil {
+			tx.Rollback()
+			return err
+		}
+	}
+
+	tx.Commit()
+	return
+}
+
+func dirPathMigration() string {
+	_, filename, _, _ := runtime.Caller(1)
+	return path.Join(path.Dir(filename), PathMigration+"20231219database_migration.sql")
+}

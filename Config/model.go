@@ -3,7 +3,7 @@ package Config
 const (
 	ENVIRONMENT_PATH = "/Environment/"
 	Localhost        = "Local"
-	PathMigration    = "../Repository/Migration/"
+	PathMigration    = "../Services/Migration/"
 )
 
 type DbSqlConfigName string
