@@ -1,0 +1,7 @@
+databases:
+  engine: "mysql"
+  username: "root" #username to use localy setup
+  password: "" #password to use localy setup
+  port: "3306"
+  host: "localhost"
+  maximum_connection: 20
