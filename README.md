@@ -61,3 +61,7 @@ go test -covermode=count -coverprofile=cp.out
 # See Coverage unit test on browser
 go tool cover -html=cp.out
 ```
+
+this covarage unit test:
+- unit test coverage 91.9% code repository all logic for store data to database with Sql driver
+![img.png](img.png)
