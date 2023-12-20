@@ -7,7 +7,6 @@ import (
 	"database/sql"
 	"errors"
 	"github.com/labstack/echo"
-	uuid "github.com/satori/go.uuid"
 	"net/http"
 )
 
@@ -50,7 +49,7 @@ func (c *Controller) CreateProduct(ctx echo.Context) (err error) {
 		})
 	}
 
-	req.Id = uuid.NewV4().String()
+	req.Id = "1a41c84f-9aba-4b77-acee-9dae4fc06b4a"
 	if err = Repository.ApplicationRepository.Product.CreateProduct(ctx.Request().Context(), req); err != nil {
 		return ctx.JSON(http.StatusInternalServerError, &Response.Responses{
 			Data:    nil,

@@ -4,6 +4,7 @@ Tech Stack:
 - Golang 1.19
 - Echo 3.3.10
 - MySql
+- sqlmock -> for mocking Sql driver data-dog/go-sqlmock 
 
 ## Architecture
 ```
@@ -53,4 +54,10 @@ Script go running on terminal, before that you must direct to the path project a
 ```bash
 # Running project
 go run main.go
+
+# Running unit test
+go test -covermode=count -coverprofile=cp.out
+
+# See Coverage unit test on browser
+go tool cover -html=cp.out
 ```

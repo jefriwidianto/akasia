@@ -18,13 +18,13 @@ func (p *product) CreateProduct(ctx context.Context, param Request.CreateProduct
 }
 
 func (p *product) CheckExistsProductTitle(ctx context.Context, title string) (exists bool, err error) {
-	query := `SELECT EXISTS (SELECT 1 FROM t_product WHERE LOWER(title) = LOWER(?))`
+	query := `SELECT EXISTS (SELECT 1 FROM t_product WHERE LOWER(title) = LOWER(?)) AS "exists"`
 	err = Config.DATABASE_MAIN.Get().QueryRowContext(ctx, query, title).Scan(&exists)
 	return
 }
 
 func (p *product) CheckExistsProductId(ctx context.Context, id string) (exists bool, err error) {
-	query := `SELECT EXISTS (SELECT 1 FROM t_product WHERE id = ?)`
+	query := `SELECT EXISTS (SELECT 1 FROM t_product WHERE id = ?) AS "exists"`
 	err = Config.DATABASE_MAIN.Get().QueryRowContext(ctx, query, id).Scan(&exists)
 	return
 }
@@ -38,7 +38,7 @@ func (p *product) UpdateProduct(ctx context.Context, param Request.UpdateProduct
 }
 
 func (p *product) DeleteProduct(ctx context.Context, id string) (err error) {
-	query := `UPDATE t_product SET deleted_at = ? WHERE id = ? AND deleted_at IS NULL `
+	query := `UPDATE t_product SET deleted_at = ? WHERE id = ? AND deleted_at IS NULL`
 	if _, err = Config.DATABASE_MAIN.Get().ExecContext(ctx, query, time.Now(), id); err != nil {
 		return err
 	}
